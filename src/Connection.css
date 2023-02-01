@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.ant-btn {
+  margin-right: 8px;
+}
+
+.ant-card {
+  margin: auto;
+  margin-top: 5%;
+}
