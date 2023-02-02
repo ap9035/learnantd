@@ -1,12 +1,15 @@
-import './Connection.css';
+import './App.css';
 import {Form, Select, Input, Button, Space, Card} from 'antd';
+import React from "react";
 const { TextArea } = Input;
 
 const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { offset: 10, span: 14 },
 };
 
-const ipOptions = [
+let resourcesOpts = [];
+
+const ips = [
     {
         label: 'tirhmmb01',
         value: 'tirhmmb01'
@@ -16,6 +19,23 @@ const ipOptions = [
         value: 'tirhmmb02'
     }
 ];
+
+const groups = [
+    {
+        label: 'MMB_UAT_AP',
+        value: 'MMB_UAT_AP'
+    },
+    {
+        label: 'MMB_PROD_AP',
+        value: 'MMB_PROD_AP'
+    },
+    {
+        label: 'MMB_UT_AP',
+        value: 'MMB_UT_AP'
+    }
+];
+
+resourcesOpts = resourcesOpts.concat(groups, ips)
 
 const portOptions = [
     {
@@ -28,47 +48,35 @@ const portOptions = [
     }
 ];
 
-const groupOptions = [
-    {
-        label: 'MMB_UAT_AP',
-        value: 'MMB_UAT_AP'
-    },
-    {
-        label: 'MMB_PROD_AP',
-        value: 'MMB_PROD_AP'
-    },
-    {
-        label: 'MMB_UAT_WEN',
-        value: 'MMB_UAT_AP'
-    }
-];
-
 function Connection() {
     const [form] = Form.useForm();
 
     const onFinish = (values) => {
+        // Submit to backend here
         console.log(values);
     };
 
+    const genExcel = (values) => {
+        // Generate Excel file here
+        console.log(form.getFieldValue());
+    }
+
     return (
-        <Card title="Connection" style={{ width: 600 }}>
+        <Card title="Connection">
             <Form
                 form={form}
                 name="connection"
-                style={{
-                    maxWidth: 600,
-                }}
                 labelCol={{
-                    span: 8,
+                    span: 6,
                 }}
                 wrapperCol={{
-                    span: 16,
+                    span: 18,
                 }}
                 onFinish={onFinish}
             >
                 <Form.Item
-                    label="Source IP"
-                    name="sourceIp"
+                    label="Source IP / Group"
+                    name="source"
                     rules={[
                         {
                             required: true,
@@ -82,14 +90,13 @@ function Connection() {
                         style={{
                             width: '100%',
                         }}
-                        placeholder="Please select"
-                        options={ipOptions}
+                        options={resourcesOpts}
                     />
                 </Form.Item>
 
                 <Form.Item
-                    label="Dest IP"
-                    name="destIp"
+                    label="Dest IP / Group"
+                    name="dest"
                     rules={[
                         {
                             required: true,
@@ -103,8 +110,7 @@ function Connection() {
                         style={{
                             width: '100%',
                         }}
-                        placeholder="Please select"
-                        options={ipOptions}
+                        options={resourcesOpts}
                     />
                 </Form.Item>
 
@@ -140,12 +146,27 @@ function Connection() {
                 >
                     <TextArea rows={4} />
                 </Form.Item>
+                <Form.Item
+                    label="Ticket Number"
+                    name="ticketNumber"
+                    rules={[
+                        {
+                            required: true,
+                        },
+                    ]}
+                >
+                    <Input
+                        placeholder="Ticket Number"
+                    />
+                </Form.Item>
 
                 <Form.Item {...tailLayout}>
+                    <Button htmlType="button" onClick={genExcel}>
+                        Generate Excel
+                    </Button>
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>
-                    <Space>    </Space>
                     <Button htmlType="button">
                         Reset
                     </Button>
